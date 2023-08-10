@@ -1,46 +1,52 @@
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+  Length,
+  IsUrl,
+  IsPositive,
+  IsNumber,
+  IsDecimal,
+} from 'class-validator';
+import { User } from 'src/users/entities/user.entity';
+import { Offer } from 'src/offers/entities/offer.entity';
+import { BasisEntity } from 'src/utils/basis-entity';
 
 @Entity()
-export class Wish {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Wish extends BasisEntity {
   @Column()
+  @Length(1, 250)
   name: string;
 
   @Column()
+  @IsUrl()
   link: string;
 
   @Column()
+  @IsUrl()
   image: string;
 
   @Column()
+  @IsPositive()
+  @IsNumber({ maxDecimalPlaces: 2 })
   price: number;
 
-  @Column()
+  @Column({ default: 0 })
+  @IsPositive()
+  @IsNumber({ maxDecimalPlaces: 2 })
   raiced: number;
 
-  // owner:  /* ссылка на пользователя, который добавил описание подарка   Один ко многим?*/
+  @ManyToOne(() => User, (user) => user.wishes)
+  owner: User;
 
   @Column()
+  @Length(1, 1024)
   description: string;
 
-  // offers: [] /* массив ссылок на заявки скинуться от других пользователей */
+  @OneToMany(() => Offer, (offer) => offer.item)
+  offers: Offer[];
 
   @Column()
+  @IsDecimal()
   copied: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }
 
 /*
