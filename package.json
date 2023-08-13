@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.1.0",
     "@nestjs/mapped-types": "^1.1.0",
@@ -83,5 +84,18 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "pnpm": {
+    "overrides": {
+      "cookiejar@<2.1.4": ">=2.1.4",
+      "jsonwebtoken@<=8.5.1": ">=9.0.0",
+      "qs@>=6.9.0 <6.9.7": ">=6.9.7",
+      "webpack@>=5.0.0 <5.76.0": ">=5.76.0",
+      "xml2js@<0.5.0": ">=0.5.0",
+      "json5@>=2.0.0 <2.2.2": ">=2.2.2",
+      "semver@>=6.0.0 <6.3.1": ">=6.3.1",
+      "semver@>=7.0.0 <7.5.2": ">=7.5.2",
+      "jsonwebtoken@<9.0.0": ">=9.0.0"
+    }
   }
 }

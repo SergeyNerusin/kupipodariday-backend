@@ -5,38 +5,67 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+// import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { AuthUser } from 'src/utils/decorators/user.decorators';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { FindUserDto } from './dto/find-user.dto';
+import {
+  UserProfileResponseDto,
+  UserPublicProfileResponseDto,
+} from './dto/user-profile.dto';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @Get('me')
+  findOwn(@AuthUser() user: User): Promise<UserProfileResponseDto> {
+    return this.usersService.findQuery({
+      where: { id: user.id },
+      select: {
+        email: true,
+        username: true,
+        id: true,
+        avatar: true,
+        about: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Patch('me')
+  update(
+    @AuthUser() user: User,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserPublicProfileResponseDto> {
+    return this.usersService.update(user.id, updateUserDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findById(+id);
+  @Get('me/wishes')
+  getMyWishes(@AuthUser() user: User) {
+    return this.usersService.getWishes(user.username);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Get(':username')
+  getusername(@Param('username') username: string) {
+    return this.usersService.getUserByName(username);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Get(':username/wishes')
+  getuserwihes(@Param('username') username: string) {
+    return this.usersService.getWishes(username);
+  }
+
+  @Post('find')
+  async find(@Body() findUsertDto: FindUserDto): Promise<User> {
+    const { query } = findUsertDto;
+    return await this.usersService.find(query);
   }
 }

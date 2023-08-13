@@ -7,7 +7,7 @@ import { Length, IsUrl, IsEmail } from 'class-validator';
 
 @Entity()
 export class User extends BasisEntity {
-  @Column()
+  @Column({ unique: true })
   @Length(2, 30)
   username: string;
 

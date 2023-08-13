@@ -6,7 +6,7 @@ import {
   IsUrl,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class SignupUserDto {
   @IsNotEmpty()
   @Length(2, 30)
   username: string;
@@ -27,3 +27,9 @@ export class CreateUserDto {
   @Length(2, 200)
   about: string;
 }
+
+/*
+  Для регистрации нужно указать почту, пароль, 
+  имя пользователя и по желанию — аватар и описание профиля. 
+  Для авторизации достаточно имени пользователя и пароля.
+*/
