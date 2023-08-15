@@ -26,7 +26,7 @@ export class UsersController {
 
   @Get('me')
   findOwn(@AuthUser() user: User): Promise<UserProfileResponseDto> {
-    return this.usersService.findQuery({
+    return this.usersService.findDataUser({
       where: { id: user.id },
       select: {
         email: true,

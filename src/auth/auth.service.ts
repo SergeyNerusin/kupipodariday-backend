@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findQuery({
+    const user = await this.usersService.findDataUser({
       select: { username: true, password: true, id: true },
       where: { username },
     });

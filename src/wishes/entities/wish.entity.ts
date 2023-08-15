@@ -32,7 +32,7 @@ export class Wish extends BasisEntity {
   @Column({ default: 0 })
   @IsPositive()
   @IsNumber({ maxDecimalPlaces: 2 })
-  raiced: number;
+  raised: number;
 
   @ManyToOne(() => User, (user) => user.wishes)
   owner: User;

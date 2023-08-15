@@ -24,14 +24,14 @@ export class UsersService {
     });
   }
 
-  async findQuery(query: FindOneOptions<User>) {
+  async findDataUser(query: FindOneOptions<User>) {
     return await this.usersRepository.findOne(query);
   }
 
   async create(createUserDto: CreateUserDto) {
     const { username, email } = createUserDto;
 
-    const existUsername = await this.findQuery({
+    const existUsername = await this.findDataUser({
       where: { username: username },
     });
 
@@ -41,7 +41,7 @@ export class UsersService {
       );
     }
 
-    const existEmail = await this.findQuery({
+    const existEmail = await this.findDataUser({
       where: { email: email },
     });
 
@@ -64,7 +64,7 @@ export class UsersService {
     const user = await this.findById(id);
 
     if (username) {
-      const repositoryUserName = await this.findQuery({
+      const repositoryUserName = await this.findDataUser({
         where: { username: username },
       });
 
@@ -76,7 +76,9 @@ export class UsersService {
     }
 
     if (email) {
-      const repositoryUser = await this.findQuery({ where: { email: email } });
+      const repositoryUser = await this.findDataUser({
+        where: { email: email },
+      });
       if (repositoryUser && repositoryUser.id !== user.id) {
         throw new ConflictException(
           `Пользователь c таким email: ${email} уже существует`,
@@ -93,7 +95,7 @@ export class UsersService {
   }
 
   async getWishes(userName: string): Promise<Wish[]> {
-    const user = await this.findQuery({
+    const user = await this.findDataUser({
       where: { username: userName },
       relations: { wishes: true },
     });
@@ -104,7 +106,7 @@ export class UsersService {
   }
 
   async getUserByName(userName: string) {
-    const user = await this.findQuery({ where: { username: userName } });
+    const user = await this.findDataUser({ where: { username: userName } });
 
     if (!user) throw new BadRequestException(`Пользователя c ${userName} нет`);
 
@@ -112,7 +114,7 @@ export class UsersService {
   }
 
   find(query: string) {
-    return this.findQuery({
+    return this.findDataUser({
       where: [{ username: query }, { email: query }],
     });
   }

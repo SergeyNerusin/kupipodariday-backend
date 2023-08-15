@@ -1,6 +1,6 @@
 import { BasisEntity } from 'src/utils/basis-entity';
 import { Entity, Column, ManyToOne } from 'typeorm';
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsBoolean } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 
@@ -17,6 +17,7 @@ export class Offer extends BasisEntity {
   amount: number;
 
   @Column({ default: false })
+  @IsBoolean()
   hidden: boolean;
 }
 
