@@ -1,5 +1,6 @@
 import {
   Controller,
+  Req,
   Get,
   Post,
   Body,
@@ -10,7 +11,6 @@ import {
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { AuthUser } from 'src/utils/decorators/user.decorators';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { FindUserDto } from './dto/find-user.dto';
 import {
@@ -24,9 +24,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  findOwn(@AuthUser() user: User): Promise<UserProfileResponseDto> {
+  findOwn(@Req() req: { user: User }): Promise<UserProfileResponseDto> {
     return this.usersService.findDataUser({
-      where: { id: user.id },
+      where: { id: req.user.id },
       select: {
         email: true,
         username: true,
@@ -41,15 +41,15 @@ export class UsersController {
 
   @Patch('me')
   update(
-    @AuthUser() user: User,
+    @Req() req: { user: User },
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserPublicProfileResponseDto> {
-    return this.usersService.update(user.id, updateUserDto);
+    return this.usersService.update(req.user.id, updateUserDto);
   }
 
   @Get('me/wishes')
-  getMyWishes(@AuthUser() user: User) {
-    return this.usersService.getWishes(user.username);
+  getMyWishes(@Req() req: { user: User }) {
+    return this.usersService.getWishes(req.user.username);
   }
 
   @Get(':username')

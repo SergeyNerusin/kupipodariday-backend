@@ -1,8 +1,15 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { OffersService } from './offers.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
-import { AuthUser } from 'src/utils/decorators/user.decorators';
 import { UserPublicProfileResponseDto } from 'src/users/dto/user-profile.dto';
 import { Offer } from './entities/offer.entity';
 
@@ -14,9 +21,9 @@ export class OffersController {
   @Post()
   create(
     @Body() createOfferDto: CreateOfferDto,
-    @AuthUser() user: UserPublicProfileResponseDto,
+    @Req() req: { user: UserPublicProfileResponseDto },
   ): Promise<Offer> {
-    return this.offersService.create(createOfferDto, user.id);
+    return this.offersService.create(createOfferDto, req.user.id);
   }
 
   @Get()
