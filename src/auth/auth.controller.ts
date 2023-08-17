@@ -16,7 +16,6 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('signin')
   async login(@Body() user: UserSigninDto): Promise<IToken> {
-    console.log('auth.controller.ts login', user);
     return await this.authService.login(user);
   }
 

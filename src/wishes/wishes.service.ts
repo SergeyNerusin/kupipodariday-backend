@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from './entities/wish.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
@@ -17,6 +17,12 @@ export class WishesService {
     @InjectRepository(Wish) private wishRepository: Repository<Wish>,
     private userService: UsersService,
   ) {}
+
+  findAll(itemsId: number[]): Promise<Wish[]> {
+    return this.wishRepository.find({
+      where: { id: In(itemsId) },
+    });
+  }
 
   async create(userId: number, createWishDto: CreateWishDto) {
     const user = await this.userService.findById(userId);

@@ -26,7 +26,6 @@ export class WishesController {
     @AuthUser() user: UserPublicProfileResponseDto,
     @Body() createWishesDto: CreateWishDto,
   ): Promise<Wish> {
-    console.log('wihes.controller.ts createWishes() user', user);
     return this.wishesService.create(user.id, createWishesDto);
   }
 

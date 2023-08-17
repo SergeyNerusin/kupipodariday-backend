@@ -20,7 +20,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   validate(payload: any): Promise<User> {
     const user = this.userService.findById(payload.id);
-    console.log('jwt.strategy.ts', user);
     if (!user) {
       throw new UnauthorizedException('Пользователь не найден');
     }

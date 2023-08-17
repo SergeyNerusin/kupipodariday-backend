@@ -99,7 +99,7 @@ export class UsersService {
       where: { username: userName },
       relations: { wishes: true },
     });
-    console.log('user.service getWishes():', user);
+
     if (!user) throw new BadRequestException(`Пользователя c ${userName} нет`);
 
     return user.wishes;

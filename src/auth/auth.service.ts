@@ -28,7 +28,6 @@ export class AuthService {
     if (user && (await compareHash(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
-      console.log('auth.servise.ts validate', result);
       return result;
     }
     return null;
@@ -37,7 +36,6 @@ export class AuthService {
   async login(user: UserSigninDto) {
     const { username, id: sub } = user;
     const token = await this.jwtService.signAsync({ username, sub });
-    console.log('token:', token);
     return {
       access_token: token,
     };
