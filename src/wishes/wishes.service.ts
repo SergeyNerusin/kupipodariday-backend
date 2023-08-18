@@ -62,15 +62,27 @@ export class WishesService {
 
   async update(wishId: number, userId: number, updateWishDto: UpdateWishDto) {
     const wishData = await this.findById(wishId);
+
     if (userId !== wishData.owner.id) {
       throw new ForbiddenException(
         'Вы можете редактировать только свои подарки',
       );
     }
+
     if (updateWishDto.price && wishData.offers.length > 0) {
       throw new ForbiddenException(
         'Нельзя менять стоимость подарка, уже есть желающие скинуться',
       );
+    }
+
+    await this.wishRepository.update(wishId, updateWishDto);
+    return this.findById(wishId);
+  }
+
+  async updateOffer(wishId: number, updateWishDto: UpdateWishDto) {
+    const wishData = await this.findById(wishId);
+    if (!wishData) {
+      throw new ForbiddenException(`Подарок с id: ${wishId} не найден`);
     }
     await this.wishRepository.update(wishId, updateWishDto);
     return this.findById(wishId);
@@ -103,18 +115,22 @@ export class WishesService {
       throw new ForbiddenException('У вас уже есть копия этого подарка');
     }
 
+    const owner = await this.userService.findById(user.id);
+    const countCopy = copied + 1;
     const copyWish = {
       name,
       description,
       image,
       link,
       price,
-      owner: { id: user.id },
+      copied: countCopy,
     };
 
-    await this.wishRepository.update(wishId, { copied: copied + 1 });
-    return await this.wishRepository.save({
+    const objectWishes = await this.wishRepository.save({
       ...copyWish,
+      owner,
     });
+
+    return objectWishes;
   }
 }

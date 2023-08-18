@@ -19,7 +19,10 @@ export class AuthService {
     return this.usersService.create(createUserDto);
   }
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<UserProfileResponseDto> {
     const user = await this.usersService.findDataUser({
       select: { username: true, password: true, id: true },
       where: { username },

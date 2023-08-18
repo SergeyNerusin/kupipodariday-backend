@@ -13,10 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { FindUserDto } from './dto/find-user.dto';
-import {
-  UserProfileResponseDto,
-  UserPublicProfileResponseDto,
-} from './dto/user-profile.dto';
+import { UserProfileResponseDto } from './dto/user-profile.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -43,7 +40,7 @@ export class UsersController {
   update(
     @Req() req: { user: User },
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserPublicProfileResponseDto> {
+  ): Promise<UserProfileResponseDto> {
     return this.usersService.update(req.user.id, updateUserDto);
   }
 
@@ -63,8 +60,8 @@ export class UsersController {
   }
 
   @Post('find')
-  async find(@Body() findUsertDto: FindUserDto): Promise<User> {
+  find(@Body() findUsertDto: FindUserDto): Promise<UserProfileResponseDto[]> {
     const { query } = findUsertDto;
-    return await this.usersService.find(query);
+    return this.usersService.findUser(query);
   }
 }

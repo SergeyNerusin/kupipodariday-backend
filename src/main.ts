@@ -19,7 +19,13 @@ async function bootstrap() {
     ],
   };
   app.enableCors(corsOptions);
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      skipMissingProperties: true,
+    }),
+  );
   await app.listen(PORT);
 }
 bootstrap();

@@ -2,14 +2,15 @@ import { BasisEntity } from 'src/utils/basis-entity';
 import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
-import { IsUrl } from 'class-validator';
+import { IsUrl, Length } from 'class-validator';
 
 @Entity()
 export class Wishlist extends BasisEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: 'Набор из:' })
+  @Length(1, 1500)
   description: string;
 
   @Column()

@@ -33,8 +33,8 @@ export class OffersService {
         `Сумма взноса не должна превышать остатка стоимости подарка.`,
       );
     }
-    await this.wishesService.update(itemId, user.id, {
-      reised: costWishes,
+    await this.wishesService.updateOffer(itemId, {
+      raised: costWishes,
     } as UpdateWishDto);
 
     return this.offerRepository.save({ ...createOfferDto, user, item: wish });

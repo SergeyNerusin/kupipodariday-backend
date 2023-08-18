@@ -21,6 +21,15 @@ export class UsersService {
   async findById(id: number) {
     return await this.usersRepository.findOne({
       where: { id },
+      select: {
+        id: true,
+        username: true,
+        about: true,
+        avatar: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
@@ -113,9 +122,18 @@ export class UsersService {
     return user;
   }
 
-  find(query: string) {
-    return this.findDataUser({
+  findUser(query: string) {
+    return this.usersRepository.find({
       where: [{ username: query }, { email: query }],
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        about: true,
+        avatar: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 }

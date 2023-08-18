@@ -71,7 +71,7 @@ export class WishesController {
   @UseGuards(JwtAuthGuard)
   @Post(':id/copy')
   copy(
-    @Param() wishId: string,
+    @Param('id') wishId: string,
     @Req() req: { user: UserPublicProfileResponseDto },
   ): Promise<Wish> {
     return this.wishesService.copyWish(Number(wishId), req.user);

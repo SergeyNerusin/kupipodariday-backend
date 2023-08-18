@@ -44,7 +44,7 @@ export class Wish extends BasisEntity {
   @OneToMany(() => Offer, (offer) => offer.item)
   offers: Offer[];
 
-  @Column()
+  @Column({ default: 0 })
   @IsDecimal()
   copied: number;
 }
